@@ -22,9 +22,31 @@ public class SIBeansTest {
 
         logger.info(" --- All beans in context --- ");
         for(String beanName :  ctx.getBeanDefinitionNames()) {
-            logger.info("Bean " + beanName + " of type " + ctx.getBean(beanName).getClass().getSimpleName());
-        }
+            String beanSimpleName = ctx.getBean(beanName).getClass().getSimpleName();
+            logger.info("Bean " + beanName + " of type " + beanSimpleName);
 
-        //TODO 4. Retrieve beans of types ComplexBean and make sure their dependencies were correctly set.
+            if (beanName.startsWith("complexBean")) {
+                logger.info("found bean: " + beanName);
+
+                ComplexBeanImpl complexBean;
+                ComplexBean2Impl complexBean2;
+                switch(beanName) {
+                    case "complexBean0":
+                        complexBean = ctx.getBean("complexBean0", ComplexBeanImpl.class);
+                        assertNotNull(complexBean.getSimpleBean().getClass().getSimpleName());
+                        break;
+                    case "complexBean1":
+                        complexBean = ctx.getBean("complexBean1", ComplexBeanImpl.class);
+                        assertNotNull(complexBean.getSimpleBean().getClass().getSimpleName());
+                        assertTrue(complexBean.isComplex());
+                        break;
+                    case "complexBean2":
+                        complexBean2 = ctx.getBean("complexBean2", ComplexBean2Impl.class);
+                        assertNotNull(complexBean2.getSimpleBean());
+                        assertTrue(complexBean2.isComplex());
+                        break;
+                }
+            }
+        }
     }
 }
