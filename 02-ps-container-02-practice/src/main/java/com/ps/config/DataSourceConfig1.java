@@ -17,9 +17,7 @@ import java.util.Properties;
 @Configuration
 public class DataSourceConfig1 {
 
-    //TODO 13. Replace where possible all Spring annotations with JSR
-
-    @Resource
+    @Bean
     public Properties dbProps(){
         Properties p = new Properties();
         p.setProperty("driverClassName", "org.h2.Driver");
@@ -29,7 +27,7 @@ public class DataSourceConfig1 {
         return p;
     }
 
-    @Resource
+    @Bean
     public DataSource dataSource(@Value("#{dbProps.driverClassName}")String driverClassName,
                                  @Value("#{dbProps.url}")String url,
                                  @Value("#{dbProps.username}")String username,
