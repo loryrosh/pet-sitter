@@ -22,6 +22,7 @@ import static org.junit.Assert.assertNotNull;
  * Created by iuliana.cosmina on 4/17/16.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {"classpath:spring/pet-cfg.xml", "classpath:spring/test-cfg.xml"})
 public class SpringPetServiceTest2 {
 
     public static final Long PET_ID = 1L;
