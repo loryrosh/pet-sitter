@@ -7,6 +7,7 @@ import com.ps.config.PersistenceConfig;
 import com.ps.config.db.TestDataConfig;
 import com.ps.ents.User;
 import com.ps.repos.UserRepo;
+import org.hibernate.LazyInitializationException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,11 +40,11 @@ public class TestUserRepo {
 
     @Test
     public void testFindAllByUserName() {
-        List<User> johns = userRepo.findAllByUserName("john");
+        List<User> johns = userRepo.findAllByFirstName("john");
         assertTrue(johns.size() == 2);
     }
 
-    @Test//(expected = EntityNotFoundException.class)
+    @Test(expected = LazyInitializationException.class)
     public void testNoFindById() {
         User user = userRepo.getOne(99L);
         assertNull(user);
