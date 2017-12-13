@@ -62,23 +62,23 @@ public class TestJpaUserRepo {
         diana.setPassword("test");
         diana.setUserType(UserType.SITTER);
         userRepo.save(diana);
-        List<User> dianas = userRepo.findAllByUserName("diana.ross", true);
+        List<User> dianas = userRepo.findAllByUserName("dianaross", true);
         assertTrue(dianas.size() == 1);
     }
 
     @Test
     public void testUpdate() {
-        List<User> johns = userRepo.findAllByUserName("john.cusack", true);
+        List<User> johns = userRepo.findAllByUserName("johncusack", true);
         User john = johns.get(0);
         userRepo.updatePassword(john.getId(), "newpass");
     }
 
     @Test
     public void testDelete() {
-        List<User> gigis = userRepo.findAllByUserName("gigi.pedala", true);
-        User gigi = gigis.get(0);
+        List<User> johnnies = userRepo.findAllByUserName("johnnybig", true);
+        User johnny = johnnies.get(0);
 
-        userRepo.deleteById(gigi.getId());
+        userRepo.deleteById(johnny.getId());
     }
 
     @After
