@@ -80,7 +80,10 @@ public class TestDataConfig {
 
     @Bean
     public SessionFactory sessionFactory() {
-        return null; // TODO 39. Add appropriate declaration of SessionFactory bean
+        return new LocalSessionFactoryBuilder(dataSource())
+                .scanPackages("com.ps.ents")
+                .addProperties(hibernateProperties())
+                .buildSessionFactory();
     }
 
     @Bean
