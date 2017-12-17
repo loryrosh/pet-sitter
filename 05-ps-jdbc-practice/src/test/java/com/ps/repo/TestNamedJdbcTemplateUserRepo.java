@@ -4,6 +4,7 @@ import com.ps.config.AppConfig;
 import com.ps.config.TestDataConfig;
 import com.ps.ents.User;
 import com.ps.repos.UserRepo;
+import com.ps.util.Pair;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,5 +50,27 @@ public class TestNamedJdbcTemplateUserRepo {
         User user = userRepo.findById(99L);
         assertEquals("John", user.getUsername());
     }
-    
+
+    @Test
+    public void createTableTest() {
+        int count = userRepo.createTable("test");
+        assertEquals(0, count);
+    }
+
+    @Test
+    public void htmlAllByNameTest() {
+        userRepo.htmlAllByName("P_USER");
+    }
+
+    @Test
+    public void extractPairTest() {
+        Pair pair = userRepo.extractPair();
+        assertEquals("John", pair.x());
+    }
+
+    @Test
+    public void createUserTest() {
+        int count = userRepo.createUser(5L, "Diana", "mypass", "diana@opympus.com");
+        assertEquals(1, count);
+    }
 }

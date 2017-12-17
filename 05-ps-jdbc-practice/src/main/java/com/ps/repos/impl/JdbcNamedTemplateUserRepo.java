@@ -9,13 +9,14 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 
 /**
  * Created by iuliana.cosmina on 6/4/16.
  */
 @Repository("userNamedTemplateRepo")
-//TODO 29. Some of the methods have incomplete bodies that need to be completed with appropriate NamedParameterJdbcTemplate instance calls.
 public class JdbcNamedTemplateUserRepo implements UserRepo {
 
     private RowMapper<User> rowMapper = new UserRowMapper();
@@ -35,19 +36,32 @@ public class JdbcNamedTemplateUserRepo implements UserRepo {
 
     @Override
     public int createTable(String name) {
-        //NOT NEEDED
-        return 0;
+        String sql = "create table " + name + " (id long, name text)";
+        jdbcNamedTemplate.getJdbcOperations().execute(sql);
+
+        sql = "select count(*) from " + name;
+        return jdbcNamedTemplate.getJdbcOperations().queryForObject(sql, Integer.class);
     }
 
     @Override
     public void htmlAllByName(String name) {
-        //NOT NEEDED
+        String sql = "select * from " + name;
+        List<Map<String, Object>> users = jdbcNamedTemplate.getJdbcOperations().queryForList(sql);
+
+        for (Map<String, Object> user : users) {
+            user.forEach((key, val) -> {
+                System.out.println(key + ": " + val);
+            });
+            System.out.println("");
+        }
     }
 
     @Override
     public Pair extractPair() {
-        //NOT NEEDED
-        return null;
+        String sql = "select * from p_user limit 1";
+        User user = jdbcNamedTemplate.getJdbcOperations().queryForObject(sql, new UserRowMapper());
+
+        return Pair.of(user.getUsername(), user.getEmail());
     }
 
     @Override
@@ -57,14 +71,19 @@ public class JdbcNamedTemplateUserRepo implements UserRepo {
         params.put("un", username);
         params.put("pass", password);
         params.put("email", email);
-        String query = "insert into p_user(ID, USERNAME, PASSWORD, EMAIL) values(:id,:un,:pass, :email)";
-        // add NamedParameterJdbcTemplate instance call to create an user
-        return 0;
+        String query = "insert into p_user(ID, USERNAME, PASSWORD, EMAIL) values(:id, :un, :pass, :email)";
+
+        jdbcNamedTemplate.getJdbcOperations().update(query);
+        return 1;
     }
 
     @Override
     public int deleteById(Long userId) {
-        // add NamedParameterJdbcTemplate instance call to delete an user
+        String sql = "delete from p_user where id= :id";
+        Map<String, Object> params = new HashMap<>();
+        params.put("id", userId);
+
+        jdbcNamedTemplate.query(sql, params, new UserRowMapper());
         return 0;
     }
 
@@ -78,7 +97,12 @@ public class JdbcNamedTemplateUserRepo implements UserRepo {
         String sql = "select id, email, username,password from p_user where id= :id";
         Map<String, Object> params = new HashMap<>();
         params.put("id", id);
-        // add NamedParameterJdbcTemplate instance call to find an user
+
+        List<User> users = jdbcNamedTemplate.query(sql, params, new UserRowMapper());
+
+        if (users.size() > 0) {
+            return users.get(0);
+        }
         return null;
     }
 

@@ -57,7 +57,7 @@ public class TestJdbcTemplateUserRepo {
 
     @Test
     public void testCreate(){
-        int result  = userRepo.createUser(5L, "Diana", "mypass", "diana@opympus.com");
+        int result = userRepo.createUser(5L, "Diana", "mypass", "diana@opympus.com");
         assertEquals(1, result);
         Set<User> dianas = userRepo.findAllByUserName("Diana", true);
         assertTrue(dianas.size() == 1);
