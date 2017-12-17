@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
@@ -14,8 +16,10 @@ import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
  * Created by iuliana.cosmina on 8/16/16.
  */
 @Configuration
-// TODO 49. Enable support for Spring Security
-// TODO 50. Enable support for securing methods using annotations which expression attributes
+@EnableWebSecurity
+
+// Enable support for securing methods using annotations with expression attributes
+@EnableGlobalMethodSecurity(securedEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
@@ -26,8 +30,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) {
         try {
-            // TODO 51. Configure users john, jane and admin as described in home.jsp
-            auth.inMemoryAuthentication();
+            auth.inMemoryAuthentication()
+                .withUser("john").password("doe").roles("USER").and()
+                .withUser("jane").password("does").roles("USER", "ADMIN").and()
+                .withUser("admin").password("admin").roles("ADMIN");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -37,7 +43,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                //TODO 52. All URL matching /users/show/** and /users/delete/**  must be available only to users with role ADMIN
+                .antMatchers("/users/show/**").hasAnyRole("ADMIN")
+                .antMatchers("/users/delete/**").hasAnyRole("ADMIN")
                 .antMatchers("/**").hasAnyRole("ADMIN","USER")
                 .anyRequest()
                 .authenticated()

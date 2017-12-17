@@ -88,11 +88,6 @@
             <table>
                 <thead>
                 <tr>
-                    <sec:authorize url='/users/show/*'>
-                        <td>
-                            <spring:message code="label.User.count"/>
-                        </td>
-                    </sec:authorize>
                     <td>
                         <spring:message code="label.User.username"/>
                     </td>
@@ -114,14 +109,6 @@
                 </thead>
                 <c:forEach var="user" items="${users}">
                     <tr>
-                        <sec:authorize url='/users/show/*'>
-                            <td>
-                                <spring:url var="showUrl" value="show/{id}">
-                                    <spring:param name="id" value="${user.id}"/>
-                                </spring:url>
-                                <a href="${showUrl}">${user.id}</a>
-                            </td>
-                        </sec:authorize>
                         <td>
                                 ${user.username}
                         </td>

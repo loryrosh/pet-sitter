@@ -1,5 +1,6 @@
 package com.ps.init;
 
+import com.ps.config.SecurityConfig;
 import com.ps.config.ServiceConfig;
 import com.ps.config.WebConfig;
 import org.springframework.web.filter.CharacterEncodingFilter;
@@ -17,7 +18,7 @@ public class WebInitializer extends AbstractAnnotationConfigDispatcherServletIni
     @Override
     protected Class<?>[] getRootConfigClasses() {
         return new Class<?>[]{
-              // TODO 53. Set the security context as root context
+            ServiceConfig.class
         };
     }
 
