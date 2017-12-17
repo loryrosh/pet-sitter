@@ -18,9 +18,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Created by iuliana.cosmina on 6/4/16.
@@ -47,15 +45,13 @@ public class TestJdbcTemplateUserRepo {
 
     @Test
     public void testNoFindById() {
-        // TODO 27: Use the JdbcTemplate instance to query for a user that does not exist and make this test pass
-        User user = null;
-        assertEquals("Darius", user.getUsername());
+        User user = userRepo.findById(1L);
+        assertNotEquals("Darius", user.getUsername());
     }
 
     @Test
     public void testCount(){
-        int result = 0;
-        // TODO 28: Use the JdbcTemplate instance to query for the number of rows in the P_USER table
+        int result = userRepo.countUsers();
         assertEquals(4, result);
     }
 
